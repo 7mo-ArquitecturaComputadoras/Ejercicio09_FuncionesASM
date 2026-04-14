@@ -103,6 +103,17 @@ El resultado de 2 elevado a 10 es: 1024
 
 ---
 
+## Limitaciones Conocidas
+
+| # | Caso | Comportamiento actual | Causa raíz |
+|---|------|-----------------------|------------|
+| 1 | **Base negativa (`x < 0`)** | Resultado incorrecto o `NaN` | La instrucción `FYL2X` calcula `log2(x)`, y el logaritmo de un número negativo no está definido en los reales. La FPU genera un valor indefinido (`QNaN`) que se propaga por el resto del cálculo. |
+| 2 | **Base cero (`x = 0`)** | Resultado incorrecto o `-∞` | `log2(0)` tiende a `-∞`, lo que produce resultados no confiables según el valor de `y`. |
+
+> ⚠️ **Pendiente de corrección:** La función `MiPow` no valida los argumentos de entrada antes de operar. Una solución futura debería manejar los casos `x < 0` y `x = 0` antes de llamar a `FYL2X`, ya sea retornando un valor de error definido o implementando la lógica alternativa correspondiente (por ejemplo, para bases negativas con exponente entero el resultado sí está definido matemáticamente).
+
+---
+
 ## Requisitos
 
 - **Compilador:** MSVC (Visual Studio) con soporte para ensamblado MASM
