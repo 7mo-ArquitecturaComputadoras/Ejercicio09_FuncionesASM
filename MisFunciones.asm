@@ -9,7 +9,6 @@
 
 ; ------------------------------------------------------------
 ; Mi_pow: Calcula x^y usando la identidad x^y = 2^(y*log2(x))
-; Parametros en pila: [EBP+8] = x (QWORD), [EBP+16] = y (QWORD)
 ; ------------------------------------------------------------
 Mi_pow PROC
     PUSH    EBP                     ; Preserva EBP del llamador
@@ -44,30 +43,27 @@ Mi_pow ENDP
 
 
 ; ------------------------------------------------------------
-; Mi_sqrt: Calcula sqrt(x) usando la instruccion FSQRT de la FPU
-; Parametro en pila: [EBP+8] = x (QWORD)
+; Mi_sqrt: Calcula sqrt(x) usando la instruccion FSQRT
 ; ------------------------------------------------------------
 Mi_sqrt PROC
-    PUSH    EBP
-    MOV     EBP, ESP
+    PUSH    EBP                     ; Preserva EBP del llamador
+    MOV     EBP, ESP                ; EBP apunta a la base del marco actual
 
     FLD     QWORD PTR [EBP+8]       ; ST(0) = x
     FSQRT                           ; ST(0) = sqrt(x)
 
-    MOV     ESP, EBP
-    POP     EBP
+    MOV     ESP, EBP                ; Libera espacio local (simetria con la entrada)
+    POP     EBP                     ; Restaura EBP del llamador
     RET
 
 Mi_sqrt ENDP
 
 ; ------------------------------------------------------------
-; Mi_fact: Calcula x! mediante un bucle descendente en la FPU
-; Parametro en pila: [EBP+8] = x (QWORD); x debe ser entero >= 0
-; Diseño de pila FPU durante el bucle: ST(0)=x (contador), ST(1)=acumulador
+; Mi_fact: Calcula x! mediante un bucle descendente
 ; ------------------------------------------------------------
 Mi_fact PROC
-    PUSH    EBP
-    MOV     EBP, ESP
+    PUSH    EBP                     ; Preserva EBP del llamador
+    MOV     EBP, ESP                ; EBP apunta a la base del marco actual
 
     FLD1                            ; ST(0) = 1.0  (acumulador, empieza en 1)
     FLD     QWORD PTR [EBP+8]       ; ST(0) = x,  ST(1) = acumulador
