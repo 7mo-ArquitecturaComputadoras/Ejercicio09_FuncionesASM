@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Ejercicio09_FuncionesASM.vcxproj" Id="aedd1cc0-90f5-4ead-b6ba-790613823a1d" />
+</Solution>
